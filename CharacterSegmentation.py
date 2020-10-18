@@ -151,7 +151,7 @@ def letter_seg(lines_img, x_lines, i):
 	letter_img = []
 	letter_k = []
 	
-	_, contours, hierarchy = cv2.findContours(copy_img,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+	contours, hierarchy = cv2.findContours(copy_img,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 	for k in range(len(contours)):
 		cnt = contours[k]
 		if cv2.contourArea(cnt) < 50:
@@ -168,11 +168,13 @@ def letter_seg(lines_img, x_lines, i):
 	letter_index = 0
 	for e in range(len(letter)):
 		if(letter[e][0]<x_linescopy[0]):
+			print("IN HERE")
 			letter_index += 1
 			letter_img_tmp = lines_img[i][letter[e][1]-5:letter[e][1]+letter[e][3]+5,letter[e][0]-5:letter[e][0]+letter[e][2]+5]
 			letter_img = letter_img_tmp#cv2.resize(letter_img_tmp, dsize =(28, 28), interpolation = cv2.INTER_AREA)
 			cv2.imwrite(OUTPUT_DIR+str(i+1)+'_'+str(word)+'_'+str(letter_index)+'.jpg', 255-letter_img)
 		else:
+			print("NO, HERE")
 			x_linescopy.pop(0)
 			word += 1
 			letter_index = 1
@@ -256,7 +258,7 @@ def image_segmentation(filepath):
 
 	# -------------Letter Width Calculation--------#
 
-	_, contours, hierarchy = cv2.findContours(contr_retrival, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+	contours, hierarchy = cv2.findContours(contr_retrival, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 	cv2.drawContours(src_img, contours, -1, (0, 255, 0), 1)
 
 	mean_lttr_width = letter_width(contours)
@@ -284,7 +286,7 @@ def image_segmentation(filepath):
 
 	# -------------Character segmenting------------#
 
-	_, contours, hierarchy = cv2.findContours(bin_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+	contours, hierarchy = cv2.findContours(bin_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 	for cnt in contours:
 		if cv2.contourArea(cnt) > 20:
 			x, y, w, h = cv2.boundingRect(cnt)
